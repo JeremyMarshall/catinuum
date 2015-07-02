@@ -3,7 +3,7 @@
 describe 'Controller: MainCtrl', ->
 
   # load the controller's module
-  beforeEach module 'catinuumApp' 
+  beforeEach module 'catinuumApp'
 
   MainCtrl = undefined
   scope = undefined
@@ -24,4 +24,4 @@ describe 'Controller: MainCtrl', ->
 
   it 'should attach a list of things to the scope', ->
     $httpBackend.flush()
-    expect(scope.awesomeThings.length).toBe 4
+    expect(scope.awesomeThings.length).toBe 0

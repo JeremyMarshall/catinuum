@@ -5,8 +5,9 @@ angular.module 'catinuumApp', [
   'ngResource',
   'ngSanitize',
   'ui.router',
-  'ui.bootstrap'
-]
+  'ui.bootstrap',
+  'angularTreeview',
+  'diff-match-patch']
 .config ($stateProvider, $urlRouterProvider, $locationProvider) ->
   $urlRouterProvider
   .otherwise '/'

@@ -5,6 +5,9 @@ angular.module 'catinuumApp'
   $scope.menu = [
     title: 'Home'
     link: '/'
+  ,
+    title: 'Report'
+    link: '/report'
   ]
   $scope.isCollapsed = true
 

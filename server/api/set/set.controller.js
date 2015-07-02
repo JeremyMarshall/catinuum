@@ -22,7 +22,6 @@ function get(key, req, res){
 
 function inter(keys, req, res){
   client.sinter(keys, function (err, replies) {
-    console.log(keys)
     res.json(replies)
   })
 }
