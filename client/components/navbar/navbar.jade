@@ -16,9 +16,9 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
       ul.nav.navbar-nav.navbar-right
         li.dropdown
           a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-            | {{currenv}}
+            | {{currenv()}}
             span.caret
           ul.dropdown-menu
-            li(ng-repeat='env in envs')
+            li(ng-repeat='env in envs()')
               a(href='#', ng-click="setenv(env)") {{env}}
 

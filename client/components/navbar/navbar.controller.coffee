@@ -15,10 +15,12 @@ angular.module 'catinuumApp'
     route is $location.path()
 
   $scope.setenv = (e) ->
-    $scope.currenv = e
-    environments.setcurrenv(e)
+    environments.setCurr(e)
 
-  environments.getData().then (e) ->
-    $scope.envs = e
-    $scope.currenv = e[0]
+  $scope.envs = () ->
+    return environments.getEnvs()
+
+  $scope.currenv = () ->
+    return environments.getCurr()
+
 

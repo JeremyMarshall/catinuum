@@ -1,31 +1,25 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.factory 'environments', ($http, $q) ->
-  # AngularJS will instantiate a singleton by calling 'new' on this function
+.factory 'environments', ['$http', ($http) ->
+  new class Environments
+    constructor: ->
+      @currenv
+      @envs
+      @getData()
 
-  data: ''
-  current: ''
+    getData: ->
+      request = $http.get '/api/sets/ALL:envs'
+      request.then (result) =>
+        @envs = result.data
+        @currenv = result.data[0]
 
-  makeRequest: (url) ->
+    getEnvs: ->
+      return @envs
 
-# Create the deferred object
-    deferred = $q.defer()
-    $http.get(url).then (resp) ->
-      deferred.resolve resp.data
-      return
+    getCurr: ->
+      return @currenv
 
-    deferred.promise
-
-  getData:() ->
-    unless @data
-
-# Request has not been made, so make it
-      console.log "file requested, only fires once"
-      @data = @makeRequest('/api/sets/ALL:envs')
-
-    # Return the myObject stored on the service
-    @data
-
-  setcurrenv: (e) ->
-    @current = e
+    setCurr:(e) ->
+      @currenv = e
+]
