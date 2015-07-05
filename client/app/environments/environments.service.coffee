@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.factory 'environments', ['$http', ($http) ->
+.service 'environments', ['$http', ($http) ->
   new class Environments
     constructor: ->
       @currenv

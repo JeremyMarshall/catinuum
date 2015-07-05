@@ -12,7 +12,7 @@ div(ng-include='"components/navbar/navbar.html"')
 
         div(data-angular-treeview="true",
           data-tree-id="tree1",
-          data-tree-model="treedata1",
+          data-tree-model="treedata1()",
           data-node-id="id",
           data-node-label="label",
           data-node-children="children")
@@ -20,7 +20,7 @@ div(ng-include='"components/navbar/navbar.html"')
       .col-md-2.row-eq-height
         div(data-angular-treeview="true",
           data-tree-id="tree2",
-          data-tree-model="treedata2",
+          data-tree-model="treedata2()",
           data-node-id="id2",
           data-node-label="label",
           data-node-children="children")
@@ -35,9 +35,10 @@ div(ng-include='"components/navbar/navbar.html"')
 //          a(href='#', tooltip='{{thing.info}}')
 //            | {{thing.name}}
 
-//footer.footer
-//  .container
-    //p
-    //  a(href='https://twitter.com/tyhenkel') @tyhenkel
+footer.footer
+  .container
+    p
+      a(href='mailto:jeremystuartmarshall@gmail.com', ng-click="yyy()")
+        &copy; Jeremy Marshall
     //  = ' | '
     //  a(href='https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open') Issues

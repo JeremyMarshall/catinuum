@@ -6,8 +6,14 @@ angular.module 'catinuumApp'
     title: 'Home'
     link: '/'
   ,
+    title: 'Dependencies'
+    link: '/dependencies'
+  ,
     title: 'Report'
     link: '/report'
+  ,
+    title: 'How to Load'
+    link: '/load'
   ]
   $scope.isCollapsed = true
 
