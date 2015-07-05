@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.controller 'MainCtrl', ($scope, environments, setHierarchy) ->
+.controller 'MainCtrl', ($scope, environments, setHierarchy, setPairs) ->
 
   $scope.aaa =  [
     { "label" : "User", "id" : "role1", "children" : [
@@ -46,7 +46,7 @@ angular.module 'catinuumApp'
     return setHierarchy.getRaw()
 
   $scope.treedata2 = () ->
-    return $scope.bbb
+    return setPairs.getRaw()
 
   $scope.left = ["I am the very model of a modern Major-General,",
                  "I've information vegetable, animal, and mineral,",
