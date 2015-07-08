@@ -5,13 +5,25 @@ angular.module 'catinuumApp'
   new class Environments
     constructor: ->
       @currenv
-      @envs
+      @envs = {}
       @getData()
 
     getData: ->
-      request = $http.get '/api/sets/ALL:envs'
+      request = $http.get '/api/sets/ALL:sets'
+      #request = $http.get '/api/sets/ALL:envs'
       request.then (result) =>
-        @envs = result.data
+
+        tmp = result.data.sort()
+
+        for t in tmp
+          [prefix, item] = t.match(/(\w+):([\w-]+)/)[1..2]
+
+          if ! @envs[prefix]
+            @envs[prefix] = []
+
+          @envs[prefix].push item
+
+        #@envs = result.data.sort()
         @currenv = result.data[0]
 
     getEnvs: ->

@@ -19,23 +19,31 @@ angular.module 'catinuumApp'
           tmp.sort()
           @raw = []
 
+          lastmod = ''
           lastdir = ''
-          curridx = -1
-
-          console.log(tmp)
+          currmodidx = -1
+          currdiridx = -1
 
           for t in tmp
 
             console.log(t)
 
-            [prefix, dir, file] = t.match(/(\w+):([\w-]+)::([\w-]+)/)[1..3]
+            [prefix, module, dir, file] = t.match(/(\w+):([\w-]+)::([\w-]+)::([\w-]+)/)[1..4]
+
+            if lastmod != module
+              lastmod = module
+              lastdir = ''
+
+              currmodidx++
+              currdiridx = -1
+              @raw.push {'label': module, 'id': t, 'children': [], 'collapsed': 0}
 
             if lastdir != dir
               lastdir = dir
-              curridx++
-              @raw.push {'label': dir, 'id': t, 'children': [], 'collapsed': 1}
+              currdiridx++
+              @raw[currmodidx].children.push {'label': dir, 'id': t, 'children': [], 'collapsed': 0}
 
-            @raw[curridx].children.push {'label': file, 'id': t, 'children': []}
+            @raw[currmodidx].children[currdiridx].children.push {'label': file, 'id': t, 'children': []}
 
 #{ "label" : "subUser1", "id" : "role11", "children" : [] },
 

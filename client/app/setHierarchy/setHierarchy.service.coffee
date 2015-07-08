@@ -22,12 +22,7 @@ angular.module 'catinuumApp'
           lastpre = ''
           curridx = -1
 
-          console.log(tmp)
-
           for t in tmp
-
-            console.log(t)
-
             [prefix, name] = t.match(/(\w+):([\w-]+)/)[1..2]
 
             if lastpre != prefix

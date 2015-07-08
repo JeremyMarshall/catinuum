@@ -10,6 +10,7 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
 
     div#navbar-main.navbar-collapse.collapse(collapse='isCollapsed')
       ul.nav.navbar-nav
+
         li(ng-repeat='item in menu', ng-class='{active: isActive(item.link)}')
           a(ng-href='{{item.link}}') {{item.title}}
 
@@ -19,6 +20,10 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
             | {{currenv()}}
             span.caret
           ul.dropdown-menu
-            li(ng-repeat='env in envs()')
-              a(href='#', ng-click="setenv(env)") {{env}}
+            li.dropdown-header(ng-repeat-start='(section, envs1) in envs()')
+              | {{section}}
 
+            li(ng-repeat='env in envs1')
+              a(href='#', ng-click="setenv(section + ':' + env)") {{env}}
+
+            li(ng-repeat-end)
