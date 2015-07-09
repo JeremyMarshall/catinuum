@@ -338,12 +338,68 @@ exports.index = function(req, res) {
     }
   ];
 
+  var meta = new function(){
+
+    this.KeyLabel = 'KEY'
+    this.keyFields = []
+
+    this.PairLabel = 'PAIR'
+    this.pairFields = []
+
+    this.fields = {
+      src: {},
+      file: { key:2, pair:2},
+      directory: { key:1, pair:1},
+      aux: {},
+      cmt: {},
+      environment: { key:0},
+      ext: {},
+      module: {pair:0}
+    };
+
+
+    this.key = function(data){
+      if(this.keyFields.length == 0){
+        for( var k in this.fields ){
+          if(this.fields[k].key){
+            this.keyFields[this.fields[k].key] = k;
+          }
+        }
+      }
+      var k = this.KeyLabel
+      for( var f in this.keyFields){
+        k += '::' + data[this.keyFields[f]]
+      }
+
+      return k
+    }
+
+
+    this.pair = function(data){
+      if(this.pairFields.length == 0){
+        for( var k in this.fields ){
+          if(this.fields[k].pair){
+            this.pairFields[this.fields[k].pair] = k;
+          }
+        }
+      }
+      var k = this.PairLabel
+      for( var f in this.pairFields){
+        k += '::' + data[this.pairFields[f]]
+      }
+
+      return k
+    }
+
+  }
+
   client.flushdb();
 
   data.forEach(function(entry){
 
-    var key  = 'KEY:' + entry.environment + '::' + entry.directory + '::' + entry.file;
-    var pair = 'PAIR:' + entry.module + '::' + entry.directory + '::' + entry.file;
+    var key = meta.key(entry)
+    //var pair = 'PAIR:' + entry.module + '::' + entry.directory + '::' + entry.file;
+    var pair = meta.pair(entry)
 
     client.hset(key, 'src', entry.src);
     client.hset(key, 'cmt', entry.cmt);
