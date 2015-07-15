@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var client = require('../../components/myredis').client();
 
-exports.index = function(req, res) {
+exports.index = function (req, res) {
 
   var data = [
     {
@@ -338,134 +338,113 @@ exports.index = function(req, res) {
     }
   ];
 
-  var meta = new function(){
+  var meta = new function () {
 
-    this.KeyLabel = 'KEY'
-    this.keyFields = []
+    this.separator = '::';
 
-    this.PairLabel = 'PAIR'
-    this.pairFields = []
+    this._labels = {
+      key: 'KEY',
+      pair: 'N-PLE',
+      all: 'ALL',
+      sets: 'sets',
+      types: 'types'
+    }
+
+    this._compound = {}
 
     this.fields = {
-      src: {},
-      file: { key:2, pair:2},
-      directory: { key:1, pair:1},
-      aux: {},
-      cmt: {},
-      environment: { key:0},
-      ext: {},
-      module: {pair:0}
+      src: {member: 0},
+      file: {key: 2, pair: 2, set: 'FILE'},
+      directory: {key: 1, pair: 1, set: 'DIR'},
+      aux: {member: 2},
+      cmt: {member: 1},
+      environment: {key: 0, set: 'ENV'},
+      ext: {member: 3, set: 'EXT'},
+      module: {pair: 0, set: 'MOD'},
+      del: {member: 4}
     };
 
+    this.match = function (what) {
+      if (!this._compound[what]) {
 
-    this.key = function(data){
-      if(this.keyFields.length == 0){
-        for( var k in this.fields ){
-          if(this.fields[k].key){
-            this.keyFields[this.fields[k].key] = k;
+        this._compound[what] = []
+
+        for (var k in this.fields) {
+          if (this.fields[k][what]) {
+            this._compound[what][this.fields[k][what]] = k;
           }
         }
       }
-      var k = this.KeyLabel
-      for( var f in this.keyFields){
-        k += '::' + data[this.keyFields[f]]
-      }
+    };
 
-      return k
-    }
+    this.match_str = function (what) {
+      if (!this._compound[what]) {
 
+        this._compound[what] = {}
 
-    this.pair = function(data){
-      if(this.pairFields.length == 0){
-        for( var k in this.fields ){
-          if(this.fields[k].pair){
-            this.pairFields[this.fields[k].pair] = k;
+        for (var k in this.fields) {
+          if (this.fields[k][what]) {
+            this._compound[what][k] = this.fields[k][what];
           }
         }
       }
-      var k = this.PairLabel
-      for( var f in this.pairFields){
-        k += '::' + data[this.pairFields[f]]
+    };
+
+    this.hset = function (key, what, data) {
+      this.match(what)
+
+      for (var f in this._compound[what]) {
+        client.hset(key, this._compound[what][f], data[this._compound[what][f]]);
       }
+    };
+
+    this.key = function (what, data) {
+      this.match(what)
+
+      var k = this._labels[what]
+      for (var f in this._compound[what]) {
+        k += this.separator + data[this._compound[what][f]]
+      }
+      client.sadd('ALL' + this.separator+ what, k);
 
       return k
-    }
+    };
 
-  }
+    this.sets = function (pair, what, data) {
+      this.match_str(what)
+      for (var j in this._compound[what]) {
+
+        client.sadd(this.fields[j][what] + this.separator + data[j], pair);
+        client.sadd(this._labels['all'] + this.separator + this._compound[what][j], this.fields[j][what] + this.separator +  data[j]);
+
+        for (var k in this._compound[what]) {
+          if ((j != k) && (data[k] != data[j])) {
+            client.sadd(this._compound[what][k] + this.separator + data[k] + this.separator + 'sets', this._compound[what][j] + this.separator + data[j]);
+          }
+        }
+      }
+    };
+
+    this.set_types = function(what) {
+      for (var k in this._compound[what]) {
+        client.sadd(this._labels['all'] + this.separator + what + this.separator + this._labels['types'], this._compound[what][k]);
+
+      }
+    };
+  };
 
   client.flushdb();
 
-  data.forEach(function(entry){
+  data.forEach(function (entry) {
 
-    var key = meta.key(entry)
-    //var pair = 'PAIR:' + entry.module + '::' + entry.directory + '::' + entry.file;
-    var pair = meta.pair(entry)
+    var key = meta.key('key', entry)
+    var pair = meta.key('pair', entry)
 
-    client.hset(key, 'src', entry.src);
-    client.hset(key, 'cmt', entry.cmt);
-    client.hset(key, 'aux', entry.src);
+    meta.hset(key, 'member', entry)
+    meta.sets(pair, 'set', entry);
+  });
 
-    if(entry.del) {
-      client.hset(key, 'del', 1);
-      //client.sadd("ALL:sets", 'DEL');
-
-      client.sadd('DEL:sets', 'ENV:' + entry.environment);
-      client.sadd('DEL:sets', 'MOD:' + entry.module);
-      client.sadd('DEL:sets', 'DIR:' + entry.directory);
-      //client.sadd('DEL:sets', 'FILE:' + entry.file);
-      client.sadd('DEL:sets', 'EXT:' + entry.ext);
-    }
-
-    client.hset(key, 'ext', entry.ext);
-    client.sadd('ALL:keys', key);
-    client.hset(pair, entry.environment, key);
-    client.sadd('ALL:pairs', pair);
-
-    client.sadd('ENV:' + entry.environment, pair);
-    client.sadd('MOD:' + entry.module, pair);
-    client.sadd('DIR:' + entry.directory, pair);
-    client.sadd('FILE:' + entry.file, pair);
-    client.sadd('EXT:' + entry.ext, pair);
-
-    client.sadd('ENV:' + entry.environment + ':sets', 'MOD:' + entry.module);
-    client.sadd('ENV:' + entry.environment + ':sets', 'DIR:' + entry.directory);
-    //client.sadd('ENV:' + entry.environment + ':sets','FILE:' + entry.file);
-    client.sadd('ENV:' + entry.environment + ':sets','EXT:' + entry.ext);
-
-    client.sadd('MOD:' + entry.module + ':sets', 'ENV:' + entry.environment );
-    client.sadd('MOD:' + entry.module + ':sets', 'DIR:' + entry.directory);
-    //client.sadd('MOD:' + entry.module + ':sets','FILE:' + entry.file);
-    client.sadd('MOD:' + entry.module + ':sets','EXT:' + entry.ext + '');
-
-    client.sadd('DIR:' + entry.directory + ':sets', 'ENV:' + entry.environment );
-    client.sadd('DIR:' + entry.directory + ':sets', 'MOD:' + entry.module);
-    //client.sadd('DIR:' + entry.directory + ':sets','FILE:' + entry.file);
-    client.sadd('DIR:' + entry.directory + ':sets','EXT:' + entry.ext + '');
-
-    client.sadd('EXT:' + entry.ext + ':sets', 'ENV:' + entry.environment );
-    client.sadd('EXT:' + entry.ext + ':sets', 'MOD:' + entry.module);
-    //client.sadd('EXT:' + entry.ext + ':sets','FILE:' + entry.file);
-    client.sadd('EXT:' + entry.ext + ':sets','DIR:' + entry.directory);
-
-    client.sadd('ALL:sets', 'ENV:' + entry.environment );
-    client.sadd('ALL:sets', 'MOD:' + entry.module);
-    client.sadd('ALL:sets', 'DIR:' + entry.directory);
-    //client.sadd('ALL:sets', 'FILE:' + entry.file);
-    client.sadd('ALL:sets', 'EXT:' + entry.ext);
-
-    client.sadd('ALL:envs', 'ENV:' + entry.environment );
-    client.sadd('ALL:mods', 'MOD:' + entry.module);
-    client.sadd('ALL:dirs', 'DIR:' + entry.directory);
-    client.sadd('ALL:files', 'FILE:' + entry.file);
-    client.sadd('ALL:exts', 'EXT:' + entry.ext);
-
-    client.sadd('ALL:set_types', 'ENV');
-    client.sadd('ALL:set_types', 'MOD');
-    client.sadd('ALL:set_types', 'DIR');
-    client.sadd('ALL:set_types', 'FILE');
-    client.sadd('ALL:set_types', 'EXT');
-
-  })
+  meta.set_types('set');
 
   res.json([]);
 }
