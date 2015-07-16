@@ -24,6 +24,6 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
               | {{section}}
 
             li(ng-repeat='env in envs1')
-              a(href='#', ng-click="setenv(section + ':' + env)") {{env}}
+              a(href='#', ng-click="setenv(section + '::' + env)") {{env}}
 
             li(ng-repeat-end)

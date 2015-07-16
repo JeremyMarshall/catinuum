@@ -346,7 +346,7 @@ exports.index = function (req, res) {
       key: 'KEY',
       pair: 'N-PLE',
       all: 'ALL',
-      sets: 'sets',
+      set: 'sets',
       types: 'types'
     }
 
@@ -354,13 +354,14 @@ exports.index = function (req, res) {
 
     this.fields = {
       src: {member: 0},
-      file: {key: 2, pair: 2, set: 'FILE'},
-      directory: {key: 1, pair: 1, set: 'DIR'},
+      //file: {key: 2, pair: 3, set: 'FILE'},
+      file: {key: 2, pair: 3},
+      directory: {key: 2, pair: 2, set: 'DIR'},
       aux: {member: 2},
       cmt: {member: 1},
-      environment: {key: 0, set: 'ENV'},
+      environment: {key: 1, set: 'ENV'},
       ext: {member: 3, set: 'EXT'},
-      module: {pair: 0, set: 'MOD'},
+      module: {pair: 1, set: 'MOD'},
       del: {member: 4}
     };
 
@@ -416,6 +417,7 @@ exports.index = function (req, res) {
 
         client.sadd(this.fields[j][what] + this.separator + data[j], pair);
         client.sadd(this._labels['all'] + this.separator + this._compound[what][j], this.fields[j][what] + this.separator +  data[j]);
+        client.sadd(this._labels['all'] + this.separator + this._labels[what], this.fields[j][what] + this.separator +  data[j]);
 
         for (var k in this._compound[what]) {
           if ((j != k) && (data[k] != data[j])) {

@@ -9,14 +9,13 @@ angular.module 'catinuumApp'
       @getData()
 
     getData: ->
-      request = $http.get '/api/sets/ALL:sets'
-      #request = $http.get '/api/sets/ALL:envs'
+      request = $http.get '/api/sets/ALL::sets'
       request.then (result) =>
 
         tmp = result.data.sort()
 
         for t in tmp
-          [prefix, item] = t.match(/(\w+):([\w-]+)/)[1..2]
+          [prefix, item] = t.match(/(\w+)::([\w-]+)/)[1..2]
 
           if ! @envs[prefix]
             @envs[prefix] = []

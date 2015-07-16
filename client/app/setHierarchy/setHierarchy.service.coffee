@@ -13,7 +13,7 @@ angular.module 'catinuumApp'
       if @currenv != environments.getCurr()
         @currenv = environments.getCurr()
 
-        request = $http.get "/api/sets/#{@currenv}:sets"
+        request = $http.get "/api/sets/#{@currenv}::sets"
         request.then (result) =>
           tmp = result.data
           tmp.sort()
@@ -23,7 +23,7 @@ angular.module 'catinuumApp'
           curridx = -1
 
           for t in tmp
-            [prefix, name] = t.match(/(\w+):([\w-]+)/)[1..2]
+            [prefix, name] = t.match(/(\w+)::([\w-]+)/)[1..2]
 
             if lastpre != prefix
               lastpre = prefix

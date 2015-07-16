@@ -28,7 +28,7 @@ angular.module 'catinuumApp'
 
             console.log(t)
 
-            [prefix, module, dir, file] = t.match(/(\w+):([\w-]+)::([\w-]+)::([\w-]+)/)[1..4]
+            [prefix, module, dir, file] = t.match(/([\w-]+)::([\w-]+)::([\w-]+)::([\w-]+)/)[1..4]
 
             if lastmod != module
               lastmod = module
