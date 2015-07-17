@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.service 'setHierarchy', ['$http', 'environments', ($http, environments) ->
+.service 'setHierarchy', ['$http', 'environments', 'meta', ($http, environments, meta) ->
   new class Hierarchy
     constructor: ->
       @currenv
@@ -13,7 +13,7 @@ angular.module 'catinuumApp'
       if @currenv != environments.getCurr()
         @currenv = environments.getCurr()
 
-        request = $http.get "/api/sets/#{@currenv}::sets"
+        request = $http.get "/api/sets/#{meta.sets(@currenv)}"
         request.then (result) =>
           tmp = result.data
           tmp.sort()
@@ -23,16 +23,14 @@ angular.module 'catinuumApp'
           curridx = -1
 
           for t in tmp
-            [prefix, name] = t.match(/(\w+)::([\w-]+)/)[1..2]
+            [prefix, name] = t.match(///(\w+)#{meta.separator}([\w-]+)///)[1..2]
 
             if lastpre != prefix
               lastpre = prefix
               curridx++
-              @raw.push {'label': prefix, 'id': t, 'children': [], 'collapsed': 1}
+              @raw.push {label: prefix, id: t, children: [], collapsed: 0}
 
-            @raw[curridx].children.push {'label': name, 'id': t, 'children': []}
-
-            #{ "label" : "subUser1", "id" : "role11", "children" : [] },
+            @raw[curridx].children.push {label: name, id: t, children: [], collapsed: 0}
 
     getRaw:() ->
       @getData()

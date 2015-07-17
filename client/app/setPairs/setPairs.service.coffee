@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.service 'setPairs', ['$http', 'environments', ($http, environments) ->
+.service 'setPairs', ['$http', 'environments', 'meta', ($http, environments, meta) ->
   new class Pairs
     constructor: ->
       @currenv
@@ -28,7 +28,7 @@ angular.module 'catinuumApp'
 
             console.log(t)
 
-            [prefix, module, dir, file] = t.match(/([\w-]+)::([\w-]+)::([\w-]+)::([\w-]+)/)[1..4]
+            [prefix, module, dir, file] = t.match(///([\w-]+)#{meta.separator}([\w-]+)#{meta.separator}([\w-]+)#{meta.separator}([\w-]+)///)[1..4]
 
             if lastmod != module
               lastmod = module

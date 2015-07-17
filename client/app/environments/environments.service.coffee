@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.service 'environments', ['$http', ($http) ->
+.service 'environments', ['$http', 'meta', ($http, meta) ->
   new class Environments
     constructor: ->
       @currenv
@@ -9,13 +9,13 @@ angular.module 'catinuumApp'
       @getData()
 
     getData: ->
-      request = $http.get '/api/sets/ALL::sets'
+      request = $http.get "/api/sets/#{meta.all_sets()}"
       request.then (result) =>
 
         tmp = result.data.sort()
 
         for t in tmp
-          [prefix, item] = t.match(/(\w+)::([\w-]+)/)[1..2]
+          [prefix, item] = t.match(///(\w+)#{meta.separator}([\w-]+)///)[1..2]
 
           if ! @envs[prefix]
             @envs[prefix] = []

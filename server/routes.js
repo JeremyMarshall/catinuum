@@ -10,7 +10,7 @@ module.exports = function(app) {
 
   // Insert routes below
   app.use('/api/load', require('./api/load'));
-  app.use('/api/hashs',  require('./api/hash'))
+  app.use('/api/hashes',  require('./api/hash'))
   app.use('/api/sets',   require('./api/set'))
   app.use('/api/pairs',  require('./api/pair'))
 
