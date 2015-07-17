@@ -19,33 +19,28 @@ angular.module 'catinuumApp'
           tmp.sort()
           @raw = []
 
-          lastmod = ''
-          lastdir = ''
-          currmodidx = -1
-          currdiridx = -1
+          lastval = ['']
+          tree = []
+
 
           for t in tmp
 
-            console.log(t)
+            currval = t.match(///([\w-]+)///g)[1..]
 
-            [prefix, module, dir, file] = t.match(///([\w-]+)#{meta.separator}([\w-]+)#{meta.separator}([\w-]+)#{meta.separator}([\w-]+)///)[1..4]
+            idx = 0
+            tree = @raw
 
-            if lastmod != module
-              lastmod = module
-              lastdir = ''
+            for c in currval
 
-              currmodidx++
-              currdiridx = -1
-              @raw.push {'label': module, 'id': t, 'children': [], 'collapsed': 0}
+              if lastval[idx] != c
+                lastval[idx] = c
+                tree.push {label: c, id: t, children: [], collapsed: 0 }
 
-            if lastdir != dir
-              lastdir = dir
-              currdiridx++
-              @raw[currmodidx].children.push {'label': dir, 'id': t, 'children': [], 'collapsed': 0}
+                for i in [idx+1..idx+2]
+                  lastval[i] = ''
 
-            @raw[currmodidx].children[currdiridx].children.push {'label': file, 'id': t, 'children': []}
-
-#{ "label" : "subUser1", "id" : "role11", "children" : [] },
+              tree = tree[tree.length - 1].children
+              idx = idx + 1
 
     getRaw:() ->
       @getData()

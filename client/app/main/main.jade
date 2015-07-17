@@ -11,16 +11,16 @@ div(ng-include='"components/navbar/navbar.html"')
       .col-md-2.row-eq-height.set-tree
 
         div(data-angular-treeview="true",
-          data-tree-id="tree1",
-          data-tree-model="treedata1()",
+          data-tree-id="treeHierarchy",
+          data-tree-model="treeHierarchyData()",
           data-node-id="id",
           data-node-label="label",
           data-node-children="children")
 
       .col-md-2.row-eq-height
         div(data-angular-treeview="true",
-          data-tree-id="tree2",
-          data-tree-model="treedata2()",
+          data-tree-id="treePair",
+          data-tree-model="treePairData()",
           data-node-id="id2",
           data-node-label="label",
           data-node-children="children")
