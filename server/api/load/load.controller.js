@@ -13,6 +13,15 @@ function hset(key, what, data) {
   }
 }
 
+function hset2(key, item, what, data) {
+  meta.match_str(what)
+
+  for (var f in meta._compound[what]) {
+    client.hset(key, data[f], item);
+  }
+}
+
+
 function getKey(what, data) {
   meta.match(what)
 
@@ -59,6 +68,7 @@ exports.index = function (req, res) {
       var pair = getKey('pair', entry);
 
       hset(key, 'member', entry);
+      hset2(pair, key, 'link', entry);
       sets(pair, 'set', entry);
     });
 

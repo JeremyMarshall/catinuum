@@ -28,9 +28,9 @@ angular.module 'catinuumApp'
             if lastpre != prefix
               lastpre = prefix
               curridx++
-              @raw.push {label: prefix, id: t, children: [], collapsed: 0}
+              @raw.push {label: prefix, id: prefix, children: [], collapsed: 0, checked:false}
 
-            @raw[curridx].children.push {label: name, id: t, children: [], collapsed: 0}
+            @raw[curridx].children.push {label: name, id: t, children: [], collapsed: 0, checked:false}
 
     getRaw:() ->
       @getData()

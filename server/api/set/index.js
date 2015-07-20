@@ -8,5 +8,6 @@ var router = express.Router();
 router.get('/', controller.index);
 router.get('/:set', controller.set);
 router.get('/inter/*', controller.inter);
+router.get('/full/:set', controller.full);
 
 module.exports = router;

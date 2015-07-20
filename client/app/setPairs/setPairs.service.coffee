@@ -13,7 +13,7 @@ angular.module 'catinuumApp'
       if @currenv != environments.getCurr()
         @currenv = environments.getCurr()
 
-        request = $http.get "/api/sets/#{@currenv}"
+        request = $http.get "/api/sets/full/#{@currenv}"
         request.then (result) =>
           tmp = result.data
           tmp.sort()
@@ -30,11 +30,17 @@ angular.module 'catinuumApp'
             idx = 0
             tree = @raw
 
+            id = ''
             for c in currval
+
+              if id == ''
+                id = c
+              else
+                id = "#{id}::#{c}"
 
               if lastval[idx] != c
                 lastval[idx] = c
-                tree.push {label: c, id: t, children: [], collapsed: 0 }
+                tree.push {label: c, id: id, children: [], collapsed: 0, checked:false }
 
                 for i in [idx+1..idx+2]
                   lastval[i] = ''

@@ -9,7 +9,7 @@ angular.module 'catinuumApp'
       @getData()
 
     getData: ->
-      request = $http.get "/api/sets/#{meta.all_sets()}"
+      request = $http.get "/api/sets/"
       request.then (result) =>
 
         tmp = result.data.sort()
@@ -22,7 +22,6 @@ angular.module 'catinuumApp'
 
           @envs[prefix].push item
 
-        #@envs = result.data.sort()
         @currenv = result.data[0]
 
     getEnvs: ->

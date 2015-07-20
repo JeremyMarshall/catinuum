@@ -15,16 +15,17 @@ div(ng-include='"components/navbar/navbar.html"')
           data-tree-model="treeHierarchyData()",
           data-node-id="id",
           data-node-label="label",
-          data-node-children="children")
+          data-node-children="children",
+          data-checkbox-support="true")
 
       .col-md-2.row-eq-height
         div(data-angular-treeview="true",
           data-tree-id="treePair",
           data-tree-model="treePairData()",
-          data-node-id="id2",
+          data-node-id="id",
           data-node-label="label",
-          data-node-children="children")
-
+          data-node-children="children",
+          data-checkbox-support="true")
 
       .col-md-8.row-eq-height
         pre.textdiff(line-diff="true", left-obj="left", right-obj="right")

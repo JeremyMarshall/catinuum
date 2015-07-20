@@ -28,6 +28,10 @@ module.exports.meta = function(){
     }
   }
 
+  var all_sets = function() {
+    return "" + this._labels.all + this.separator + this._labels.set;
+  }
+
   return {
     separator: '::',
 
@@ -44,17 +48,18 @@ module.exports.meta = function(){
     fields: {
       src: {member: 0},
       //file: {key: 2, pair: 3, set: 'FILE'},
-      file: {key: 2, pair: 3},
+      file: {key: 3, pair: 3},
       directory: {key: 2, pair: 2, set: 'DIR'},
       aux: {member: 2},
       cmt: {member: 1},
-      environment: {key: 1, set: 'ENV'},
+      environment: {key: 1, set: 'ENV', link: 1},
       ext: {member: 3, set: 'EXT'},
       module: {pair: 1, set: 'MOD'},
       del: {member: 4}
     },
     match: match,
-    match_str: match_str
+    match_str: match_str,
+    all_sets: all_sets
   }
 }
 

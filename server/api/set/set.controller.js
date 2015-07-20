@@ -1,7 +1,10 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require("async");
+
 var client = require('../../components/myredis').client();
+var meta = require('../../components/meta').meta();
 
 function get(key, req, res){
   client.smembers(key, function (err, replies) {
@@ -17,13 +20,43 @@ function inter(keys, req, res){
 
 // Get list of sets
 exports.index = function(req, res) {
-  get('ALL:sets', req, res)
+  get(meta.all_sets(), req, res)
 };
 
 // Get set members
 exports.set = function(req, res) {
   get( req.param('set'), req, res)
 };
+
+// Get set members and unpack hash keys
+exports.full = function(req, res) {
+  client.smembers(req.param('set'), function (err, replies) {
+
+    var result = []
+
+    async.eachSeries(replies,
+      function (r, outCb) {
+        client.hkeys(r,
+          function (err, replies2) {
+            async.eachSeries(replies2,
+              function (r2, inCb) {
+                result.push(r + "::" + r2)
+                inCb(null)
+              },
+              function(err){
+                outCb(null)
+              }
+            )
+          }
+        )
+      },
+      function(err){
+        res.json(result);
+      }
+    )
+  })
+}
+
 
 // Get intersection of sets
 exports.inter = function(req, res) {
