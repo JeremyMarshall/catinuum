@@ -17,6 +17,8 @@ angular.module 'catinuumApp'
     if $scope.treeHierarchy and angular.isObject($scope.treeHierarchy.checkedNodes)
       console.log '1 Node Checked!!'
       console.log $scope.treeHierarchy.checkedNodes
+      setPairs.getFilteredData($scope.treeHierarchy.checkedNodes)
+
     return
   )
 
@@ -37,6 +39,12 @@ angular.module 'catinuumApp'
       console.log $scope.treePair.checkedNodes
     return
   )
+
+  $scope.$on 'env:updated', (event, data) ->
+    console.log('up')
+    $scope.treePair.checkedNodes = []
+    $scope.treeHierarchy.checkedNodes = []
+    return
 
   $scope.left = ["I am the very model of a modern Major-General,",
                  "I've information vegetable, animal, and mineral,",

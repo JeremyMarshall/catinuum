@@ -8,45 +8,60 @@ angular.module 'catinuumApp'
       @raw = []
       @getData()
 
-    getData:() ->
+    process: (data) ->
+      tmp = data
+      tmp.sort()
+      @raw = []
 
+      lastval = ['']
+      tree = []
+
+      for t in tmp
+
+        currval = t.match(///([\w-]+)///g)[1..]
+
+        idx = 0
+        tree = @raw
+
+        id = ''
+        for c in currval
+
+          if id == ''
+            id = c
+          else
+            id = "#{id}::#{c}"
+
+          if lastval[idx] != c
+            lastval[idx] = c
+            tree.push {label: c, id: id, children: [], collapsed: 0 }
+
+            for i in [idx+1..idx+2]
+              lastval[i] = ''
+
+          tree = tree[tree.length - 1].children
+          idx = idx + 1
+
+    getData:() ->
       if @currenv != environments.getCurr()
         @currenv = environments.getCurr()
 
         request = $http.get "/api/sets/full/#{@currenv}"
         request.then (result) =>
-          tmp = result.data
-          tmp.sort()
-          @raw = []
+          @process(result.data)
 
-          lastval = ['']
-          tree = []
+    getFilteredData:(sets) ->
+
+      s = sets.join('/')
+
+      if  s.length > 0
+        request = $http.get "/api/sets/interfull/#{@currenv}/#{s}"
+      else
+        request = $http.get "/api/sets/full/#{@currenv}"
+
+      request.then (result) =>
+        @process(result.data)
 
 
-          for t in tmp
-
-            currval = t.match(///([\w-]+)///g)[1..]
-
-            idx = 0
-            tree = @raw
-
-            id = ''
-            for c in currval
-
-              if id == ''
-                id = c
-              else
-                id = "#{id}::#{c}"
-
-              if lastval[idx] != c
-                lastval[idx] = c
-                tree.push {label: c, id: id, children: [], collapsed: 0, checked:false }
-
-                for i in [idx+1..idx+2]
-                  lastval[i] = ''
-
-              tree = tree[tree.length - 1].children
-              idx = idx + 1
 
     getRaw:() ->
       @getData()

@@ -7,8 +7,7 @@ angular.module 'catinuumApp', [
   'ui.router',
   'ui.bootstrap',
   'angularTreeview',
-  'diff-match-patch',
-  'ui.checkbox']
+  'diff-match-patch']
 .config ($stateProvider, $urlRouterProvider, $locationProvider) ->
   $urlRouterProvider
   .otherwise '/'

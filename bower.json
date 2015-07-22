@@ -15,11 +15,14 @@
     "font-awesome": ">=4.1.0",
     "lodash": "~2.4.1",
     "angular-ui-router": "~0.2.10",
-    "ngtreeview": "../ngtreeview#~0.0.2",
+    "ngtreeview": "git://github.com/JeremyMarshall/ngtreeview#0.0.3",
     "angular-diff-match-patch": "~0.1.10"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
     "angular-scenario": ">=1.2.*"
+  },
+  "resolutions": {
+    "ngtreeview": "0.0.3"
   }
 }

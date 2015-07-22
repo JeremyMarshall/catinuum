@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.service 'environments', ['$http', 'meta', ($http, meta) ->
+.service 'environments', ['$http', 'meta', '$rootScope', ($http, meta, $rootScope) ->
   new class Environments
     constructor: ->
       @currenv
@@ -32,4 +32,5 @@ angular.module 'catinuumApp'
 
     setCurr:(e) ->
       @currenv = e
+      $rootScope.$broadcast('env:updated', @currenv);
 ]
