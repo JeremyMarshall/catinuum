@@ -67,18 +67,31 @@ exports.interfull = function (req, res) {
 
   var params = req.params[0].split('/');
   var env = params.shift();
+  var links = [];
+
+  var values = env.split('::'),
+    curr_type = values.shift(),
+    curr_val = values.shift();
+
+  if(curr_type == 'ENV')
+    links.push(curr_val);
+
   var breakdown = [];
   var unions = [env];
 
   async.eachSeries(params, function (p, cb1) {
     var parts = p.split('::');
     if (parts.length == 2)
-      if (breakdown[parts[0]])
-        breakdown[parts[0]].push(p);
-      else {
-        var tset = shortid.generate();
-        unions.push(tset);
-        breakdown[parts[0]] = [tset, p];
+      if(parts[0] == 'ENV') {
+        links.push(parts[1]);
+      }else{
+        if (breakdown[parts[0]])
+          breakdown[parts[0]].push(p);
+        else {
+          var tset = shortid.generate();
+          breakdown[parts[0]] = [tset, p];
+          unions.push(tset);
+        }
       }
     cb1(null);
   }, function (err) {
@@ -98,7 +111,8 @@ exports.interfull = function (req, res) {
         async.eachSeries(replies, function (r, outCb) {
           client.hkeys(r, function (err, replies2) {
               async.eachSeries(replies2, function (r2, inCb) {
-                  result.push(r + "::" + r2);
+                  if(links.length < 0 || links.indexOf(r2) != -1)
+                    result.push(r + "::" + r2);
                   inCb(null)
                 },
                 function (err) {

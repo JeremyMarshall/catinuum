@@ -29,7 +29,13 @@ module.exports.meta = function(){
   }
 
   var all_sets = function() {
-    return "" + this._labels.all + this.separator + this._labels.set;
+    return this._labels.all + this.separator + this._labels.set;
+  }
+
+  var is_member = function(f){
+    this.match_str(f);
+
+
   }
 
   return {

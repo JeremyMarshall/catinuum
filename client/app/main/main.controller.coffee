@@ -25,12 +25,12 @@ angular.module 'catinuumApp'
   $scope.treePairData = () ->
     return setPairs.getRaw()
 
-  #$scope.$watch 'treePair.currentNode', ((newObj, oldObj) ->
-  #  if $scope.treePair and angular.isObject($scope.treePair.currentNode)
-  #    console.log '2 Node Selected!!'
-  #    #console.log $scope.treePair.currentNode
-  #  return
-  #), false
+  $scope.$watch 'treePair.currentNode', ((newObj, oldObj) ->
+    if $scope.treePair and angular.isObject($scope.treePair.currentNode)
+      console.log '2 Node Selected!!'
+      console.log $scope.treePair.currentNode
+    return
+  ), false
 
 
   $scope.$watchCollection 'treePair.checkedNodes', ((newObj, oldObj) ->
