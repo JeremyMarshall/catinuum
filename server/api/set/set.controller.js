@@ -37,12 +37,23 @@ exports.full = function (req, res) {
 
     async.eachSeries(replies,
       function (r, outCb) {
-        client.hkeys(r,
+        client.hgetall(r,
           function (err, replies2) {
-            async.eachSeries(replies2,
+            async.eachSeries(Object.keys(replies2),
               function (r2, inCb) {
-                result.push(r + "::" + r2)
-                inCb(null)
+
+                client.hgetall(replies2[r2], function(err, replies3){
+
+                    result.push({entry: r + "::" + r2, data: replies3});
+                    inCb(null)
+
+                  }
+
+
+                )
+
+
+
               },
               function (err) {
                 outCb(null)
@@ -109,11 +120,22 @@ exports.interfull = function (req, res) {
         var result = [];
 
         async.eachSeries(replies, function (r, outCb) {
-          client.hkeys(r, function (err, replies2) {
-              async.eachSeries(replies2, function (r2, inCb) {
-                  if(links.length < 0 || links.indexOf(r2) != -1)
-                    result.push(r + "::" + r2);
-                  inCb(null)
+          client.hgetall(r, function (err, replies2) {
+
+              console.log(Object.keys(replies2));
+
+              async.eachSeries(Object.keys(replies2), function (r2, inCb) {
+
+                  client.hgetall(replies2[r2], function(err, replies3){
+                      if(links.length == 0 || links.indexOf(r2) != -1)
+                        result.push({entry: r + "::" + r2, data: replies3});
+                      inCb(null)
+
+                    }
+
+
+                  )
+
                 },
                 function (err) {
                   outCb(null)

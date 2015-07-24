@@ -33,12 +33,12 @@ angular.module 'catinuumApp'
   ), false
 
 
-  $scope.$watchCollection 'treePair.checkedNodes', ((newObj, oldObj) ->
-    if $scope.treePair and angular.isObject($scope.treePair.checkedNodes)
-      console.log '2 Node Checked!!'
-      console.log $scope.treePair.checkedNodes
-    return
-  )
+  #$scope.$watchCollection 'treePair.checkedNodes', ((newObj, oldObj) ->
+  #  if $scope.treePair and angular.isObject($scope.treePair.checkedNodes)
+  #    console.log '2 Node Checked!!'
+  #    console.log $scope.treePair.checkedNodes
+  #  return
+  #)
 
   $scope.$on 'env:updated', (event, data) ->
     console.log('up')

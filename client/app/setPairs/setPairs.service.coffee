@@ -18,13 +18,13 @@ angular.module 'catinuumApp'
 
       for t in tmp
 
-        currval = t.match(///([\w-]+)///g)[1..]
+        currval = t.entry.match(///([\w-]+)///g)[1..]
 
         idx = 0
         tree = @raw
 
         id = ''
-        for c in currval
+        for c, index in currval
 
           if id == ''
             id = c
@@ -33,7 +33,7 @@ angular.module 'catinuumApp'
 
           if lastval[idx] != c
             lastval[idx] = c
-            tree.push {label: c, id: id, children: [], collapsed: 0 }
+            tree.push {label: c, id: id, children: [], collapsed: 0, data: if index==currval.length-1 then t.data else [] }
 
             for i in [idx+1..idx+2]
               lastval[i] = ''
