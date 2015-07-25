@@ -6,11 +6,8 @@ angular.module 'catinuumApp'
     title: 'Home'
     link: '/'
   ,
-    title: 'Dependencies'
-    link: '/dependencies'
-  ,
-    title: 'Report'
-    link: '/report'
+    title: 'Diff'
+    link: '/diff'
   ,
     title: 'How to Load'
     link: '/load'

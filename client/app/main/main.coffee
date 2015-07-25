@@ -7,3 +7,5 @@ angular.module 'catinuumApp'
     url: '/'
     templateUrl: 'app/main/main.html'
     controller: 'MainCtrl'
+
+

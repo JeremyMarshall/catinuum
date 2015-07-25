@@ -25,10 +25,10 @@ div(ng-include='"components/navbar/navbar.html"')
           data-node-id="id",
           data-node-label="label",
           data-node-children="children",
-          data-checkbox-support="true")
+          data-checkbox-support="false")
 
       .col-md-8.row-eq-height
-        pre.textdiff(line-diff="true", left-obj="left", right-obj="right")
+        div(hljs, source="source")
 
 //      h1.page-header Features:
 //      ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='thing in awesomeThings')

@@ -9,19 +9,21 @@ angular.module 'catinuumApp'
       @getData()
 
     process: (data) ->
-      tmp = data
-      tmp.sort()
+      tmp = data.sort(@compare)
       @raw = []
 
       lastval = ['']
       tree = []
+
+      @raw = [{label: '/', id: 0, children: [], collapsed: 0, data: null }]
+
 
       for t in tmp
 
         currval = t.entry.match(///([\w-]+)///g)[1..]
 
         idx = 0
-        tree = @raw
+        tree = @raw[0]['children']
 
         id = ''
         for c, index in currval
@@ -33,7 +35,7 @@ angular.module 'catinuumApp'
 
           if lastval[idx] != c
             lastval[idx] = c
-            tree.push {label: c, id: id, children: [], collapsed: 0, data: if index==currval.length-1 then t.data else [] }
+            tree.push {label: c, id: id, children: [], collapsed: 0, data: if index==currval.length-1 then t.data else null }
 
             for i in [idx+1..idx+2]
               lastval[i] = ''
@@ -66,4 +68,12 @@ angular.module 'catinuumApp'
     getRaw:() ->
       @getData()
       return @raw
+
+
+    compare: (a, b) ->
+      if a.entry < b.entry
+        return -1
+      if a.entry > b.entry
+        return 1
+      0
 ]
