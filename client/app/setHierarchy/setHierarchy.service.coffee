@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.service 'setHierarchy', ['$http', 'environments', 'meta', ($http, environments, meta) ->
+.service 'setHierarchy', ['$http', 'environments', 'meta', '$rootScope', ($http, environments, meta, $rootScope) ->
   new class Hierarchy
     constructor: ->
       @currenv
@@ -31,6 +31,7 @@ angular.module 'catinuumApp'
               @raw.push {label: prefix, id: prefix, children: [], collapsed: 0}
 
             @raw[curridx].children.push {label: name, id: t, children: [], collapsed: 0}
+            $rootScope.$broadcast('hierarchy:updated');
 
     getRaw:() ->
       @getData()

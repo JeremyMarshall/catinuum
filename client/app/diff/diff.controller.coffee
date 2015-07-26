@@ -15,8 +15,6 @@ angular.module 'catinuumApp'
 
   $scope.$watchCollection 'treeHierarchy.checkedNodes', ((newObj, oldObj) ->
     if $scope.treeHierarchy and angular.isObject($scope.treeHierarchy.checkedNodes)
-      console.log '1 Node Checked!!'
-      console.log $scope.treeHierarchy.checkedNodes
       setPairs.getFilteredData($scope.treeHierarchy.checkedNodes)
 
     return
@@ -86,3 +84,11 @@ angular.module 'catinuumApp'
 
   $scope.setbaseline = (e) ->
     environments.setBaseline(e)
+
+  $scope.$on 'pairs:updated', (event) ->
+    console.log('here2')
+    $scope.treePair.api.selectByLabel '/'
+    return
+
+  $scope.$on '$locationChangeStart', (event) ->
+   $scope.treePair.api.selectByLabel '/'

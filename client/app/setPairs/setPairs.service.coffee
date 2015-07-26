@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.service 'setPairs', ['$http', 'environments', 'meta', ($http, environments, meta) ->
+.service 'setPairs', ['$http', 'environments', 'meta', '$rootScope', ($http, environments, meta, $rootScope) ->
   new class Pairs
     constructor: ->
       @currenv
@@ -50,6 +50,7 @@ angular.module 'catinuumApp'
         request = $http.get "/api/sets/full/#{@currenv}"
         request.then (result) =>
           @process(result.data)
+          $rootScope.$broadcast('pairs:updated');
 
     getFilteredData:(sets) ->
 

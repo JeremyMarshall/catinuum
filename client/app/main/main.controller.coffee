@@ -57,6 +57,11 @@ angular.module 'catinuumApp'
     $scope.left = ''
     return
 
+  $scope.$on 'pairs:updated', (event) ->
+    $scope.treePair.api.selectByLabel '/'
+    console.log('here')
+    return
 
-
+  $scope.$on '$locationChangeStart', (event) ->
+    $scope.treePair.api.selectByLabel '/'
 
