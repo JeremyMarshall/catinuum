@@ -24,6 +24,6 @@
     "angular-scenario": ">=1.2.*"
   },
   "resolutions": {
-    "ngtreeview": "0.0.3"
+    "ngtreeview": "0.0.4"
   }
 }
