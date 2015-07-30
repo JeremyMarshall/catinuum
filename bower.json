@@ -7,9 +7,9 @@
     "es5-shim": "~3.0.1",
     "jquery": "~1.11.0",
     "bootstrap-sass-official": "~3.1.1",
-    "bootstrap": "~3.1.1",
+    "bootstrap": "~3.3.0",
     "angular-resource": ">=1.2.*",
-    "angular-cookies": ">=1.2.*",
+    "angular-cookies": "1.4.3",
     "angular-sanitize": ">=1.2.*",
     "angular-bootstrap": "~0.11.0",
     "font-awesome": ">=4.1.0",
@@ -24,6 +24,7 @@
     "angular-scenario": ">=1.2.*"
   },
   "resolutions": {
-    "ngtreeview": "0.0.4"
+    "ngtreeview": "0.0.4",
+    "angular": ">1.0.8"
   }
 }

@@ -1,0 +1,23 @@
+div#navbar-main.navbar-collapse.collapse(collapse='isCollapsed')
+  p.navbar-text
+    | Baseline
+  ul.nav.navbar-nav
+    li.dropdown
+      a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+        | {{baseline()}}
+        span.caret
+      ul.dropdown-menu
+        li(ng-repeat='env in envs()')
+          a(href='#', ng-click="setbaseline(env)") {{env}}
+  p.navbar-text
+    | Delta
+  ul.nav.navbar-nav
+    li.dropdown
+      a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+        | {{delta()}}
+        span.caret
+      ul.dropdown-menu
+        li(ng-repeat='env in envs()')
+          a(href='#', ng-click="setdelta(env)") {{env}}
+
+pre.textdiff(line-diff="true", left-obj="left", right-obj="right")

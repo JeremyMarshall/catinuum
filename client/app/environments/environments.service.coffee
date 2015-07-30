@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.service 'environments', ['$http', 'meta', '$rootScope', ($http, meta, $rootScope) ->
+.service 'environments', ['$http', 'meta', '$rootScope', '$cookies', ($http, meta, $rootScope, $cookies) ->
   new class Environments
     constructor: ->
       @currenv
@@ -24,7 +24,7 @@ angular.module 'catinuumApp'
 
           @envs[prefix].push item
 
-        @currenv = result.data[0]
+        @currenv = if $cookies.get('environment') then $cookies.get('environment') else 'ENV::master'
 
     getData1: ->
       request = $http.get "/api/sets/ALL::ENV"
@@ -37,8 +37,9 @@ angular.module 'catinuumApp'
 
           @envs1.push item
 
-        @delta = @envs1[0]
-        @baseline = @envs1[0]
+        @delta = if $cookies.get('delta') then $cookies.get('delta') else 'master'
+
+        @baseline = if $cookies.get('baseline') then $cookies.get('baseline') else 'master'
 
     getEnvs: ->
       return @envs
@@ -57,13 +58,16 @@ angular.module 'catinuumApp'
 
     setCurr:(e) ->
       @currenv = e
-      $rootScope.$broadcast('env:updated', @currenv);
+      $cookies.put( 'environment', e)
+      $rootScope.$broadcast('env:updated', @currenv)
 
     setDelta:(e) ->
       @delta = e
-      $rootScope.$broadcast('delta:updated', @delta);
+      $cookies.put( 'delta', e)
+      $rootScope.$broadcast('delta:updated', @delta)
 
     setBaseline:(e) ->
       @baseline = e
-      $rootScope.$broadcast('baselie:updated', @baseline);
+      $cookies.put( 'baseline', e)
+      $rootScope.$broadcast('baselie:updated', @baseline)
 ]

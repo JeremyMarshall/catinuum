@@ -6,9 +6,6 @@ angular.module 'catinuumApp'
     title: 'Home'
     link: '/'
   ,
-    title: 'Diff'
-    link: '/diff'
-  ,
     title: 'How to Load'
     link: '/load'
   ]

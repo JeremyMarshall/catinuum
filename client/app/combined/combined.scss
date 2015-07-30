@@ -1,26 +1,3 @@
-.thing-form {
-  margin: 20px 0;
-}
-
-#banner {
-  border-bottom: none;
-  margin-top: -20px;
-}
-
-#banner h1 {
-  font-size: 60px;
-  line-height: 1;
-  letter-spacing: -1px;
-}
-
-.hero-unit {
-  position: relative;
-  padding: 30px 15px;
-  color: #F5F5F5;
-  text-align: center;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-  background: #4393B9;
-}
 
 .footer {
   text-align: center;
@@ -95,4 +72,8 @@ div[data-tree-model] li .selected {
   color: black;
   background: #ffbbbb;
 }
-
+[data-toggle="buttons"] > .btn > input {
+  &[type="radio"], &[type="checkbox"] {
+    clip: rect(1px 10px 1px 1px);
+  }
+}

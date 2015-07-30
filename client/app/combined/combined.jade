@@ -1,0 +1,41 @@
+div(ng-include='"components/navbar/navbar.html"')
+
+.container
+  .row
+
+    .col-md-2.row-eq-height
+      div(data-angular-treeview="true",
+      data-tree-id="treePair",
+      data-tree-model="treePairData()",
+      data-node-id="id",
+      data-node-label="label",
+      data-node-children="children",
+      data-checkbox-support="false")
+
+    .col-md-8.row-eq-height
+      //.col-sm-9
+      .btn-group(data-toggle='buttons')
+        label
+          input(type='radio', name='displaytype', checked="", value='1', ng-model='displaytype')
+          |  Difference
+        label
+          input(type='radio', name='displaytype', value='2', ng-model='displaytype')
+          |  Source
+
+      div(ui-view='diff', ng-show='displaytype==1')
+      div(ui-view='src', ng-show='displaytype==2')
+
+    .col-md-2.row-eq-height.set-tree
+      div(data-angular-treeview="true",
+      data-tree-id="treeHierarchy",
+      data-tree-model="treeHierarchyData()",
+      data-node-id="id",
+      data-node-label="label",
+      data-node-children="children",
+      data-checkbox-support="true")
+
+footer.footer
+  .container
+    p
+      a(href='mailto:jeremystuartmarshall@gmail.com', ng-click="yyy()")
+    &copy; Jeremy Marshall

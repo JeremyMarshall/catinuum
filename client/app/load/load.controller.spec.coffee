@@ -1,16 +1,16 @@
 'use strict'
 
-describe 'Controller: DiffCtrl', ->
+describe 'Controller: LoadCtrl', ->
 
   # load the controller's module
   beforeEach module 'catinuumApp'
-  DiffCtrl = undefined
+  LoadCtrl = undefined
   scope = undefined
 
   # Initialize the controller and a mock scope
   beforeEach inject ($controller, $rootScope) ->
     scope = $rootScope.$new()
-    DiffCtrl = $controller 'DiffCtrl',
+    LoadCtrl = $controller 'LoadCtrl',
       $scope: scope
 
   it 'should ...', ->
