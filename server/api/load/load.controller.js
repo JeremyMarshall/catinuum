@@ -11,7 +11,9 @@ function hset(key, what, data) {
   meta.match(what)
 
   for (var f in meta._compound[what]) {
-    client.hset(key, meta._compound[what][f], data[meta._compound[what][f]], redis.print);
+    if (data[meta._compound[what][f]] != undefined) {
+      client.hset(key, meta._compound[what][f], data[meta._compound[what][f]], redis.print);
+    }
   }
 }
 
@@ -40,13 +42,39 @@ function sets(pair, what, data) {
   meta.match_str(what)
   for (var j in meta._compound[what]) {
 
-    client.sadd(meta.fields[j][what] + meta.separator + data[j], pair);
-    client.sadd(meta._labels['all'] + meta.separator + meta._compound[what][j], meta.fields[j][what] + meta.separator + data[j]);
-    client.sadd(meta._labels['all'] + meta.separator + meta._labels[what], meta.fields[j][what] + meta.separator + data[j]);
+    var val;
+    var section = meta._compound[what][j];
+    var field = meta.fields[j][what];
+
+    if(section.slice(-1) == '+') {
+      section = section.slice(0,-1);
+      field = field.slice(0,-1);
+      if(data[j] == undefined)
+        continue;
+      val = j;
+    }else{
+      val = data[j]
+    }
+
+    client.sadd(field + meta.separator + val, pair);
+    client.sadd(meta._labels['all'] + meta.separator + section, field + meta.separator + val);
+    client.sadd(meta._labels['all'] + meta.separator + meta._labels[what], field + meta.separator + val);
 
     for (var k in meta._compound[what]) {
-      if ((j != k) && (data[k] != data[j])) {
-        client.sadd(meta._compound[what][k] + meta.separator + data[k] + meta.separator + 'sets', meta._compound[what][j] + meta.separator + data[j]);
+      var valInner;
+      var sectionInner = meta._compound[what][k];
+
+      if(sectionInner.slice(-1) == '+') {
+        sectionInner = sectionInner.slice(0,-1);
+        if(data[k] == undefined)
+          continue;
+        valInner = k;
+      }else{
+        valInner = data[k]
+      }
+
+      if ((j != k) && (valInner != val)) {
+        client.sadd(sectionInner + meta.separator + valInner + meta.separator + 'sets', section + meta.separator + val);
       }
     }
   }
@@ -54,8 +82,12 @@ function sets(pair, what, data) {
 
 function set_types(what) {
   for (var k in meta._compound[what]) {
-    client.sadd(meta._labels['all'] + meta.separator + what + meta.separator + meta._labels['types'], meta._compound[what][k]);
 
+    var section = meta._compound[what][k];
+    if(section.slice(-1) == '+') {
+      section = section.slice(0, -1);
+    }
+    client.sadd(meta._labels['all'] + meta.separator + what + meta.separator + meta._labels['types'], section);
   }
 }
 
