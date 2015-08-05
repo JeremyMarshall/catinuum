@@ -11,21 +11,23 @@ angular.module 'catinuumApp'
         pair: 'N-PLE',
         all: 'ALL',
         set: 'sets',
-        types: 'types'
+        types: 'types',
+        default: 'ENV::master',
+        default_field: 'ENV'
       }
 
       @_compound = {}
 
       @field = {
-        src: {member: 0},
-        file: {key: 2, pair: 3},
-        directory: {key: 2, pair: 2, set: 'DIR'},
-        aux: {member: 2},
-        cmt: {member: 1},
-        environment: {key: 1, set: 'ENV'},
+        src: {member: 1, set: 'COMP+'},
+        file: {key: 4, pair: 3},
+        directory: {key: 3, pair: 2, set: 'DIR'},
+        aux: {member: 4, set: 'COMP+'},
+        cmt: {member: 2, set: 'COMP+'},
+        environment: {key: 1, set: 'ENV', link: 1},
         ext: {member: 3, set: 'EXT'},
-        module: {pair: 1, set: 'MOD'},
-        del: {member: 4}
+        module: {key: 2, pair: 1, set: 'MOD'},
+        del: {member: 5, set: 'COMP+'}
       }
 
     all_sets: ->

@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'catinuumApp'
-.controller 'CombinedCtrl', ($scope, $http, environments, setHierarchy, setPairs, $timeout) ->
+.controller 'CombinedCtrl', ($scope, $rootScope, $http, environments, setHierarchy, setPairs, $timeout) ->
   $scope.treeHierarchyData = () ->
     return setHierarchy.getRaw()
 
@@ -16,6 +16,8 @@ angular.module 'catinuumApp'
     if $scope.treeHierarchy and angular.isObject($scope.treeHierarchy.checkedNodes)
       setPairs.getFilteredData($scope.treeHierarchy.checkedNodes)
       $scope.source = ''
+      $scope.left = ''
+      $scope.right = ''
 
     return
   )
@@ -33,11 +35,6 @@ angular.module 'catinuumApp'
 
   $scope.treePairData = () ->
     return setPairs.getRaw()
-
-  #$scope.$watch 'treePair.currentNode', ((newObj, oldObj) ->
-  #  if $scope.treePair and angular.isObject($scope.treePair.currentNode)
-  #  return
-  #), false
 
   $scope.build_string = (node, env) ->
 
@@ -57,23 +54,10 @@ angular.module 'catinuumApp'
       $scope.source = $scope.buildSource(newObj)
     return
   ), false
-  #$scope.$watchCollection 'treePair.checkedNodes', ((newObj, oldObj) ->
-  #  if $scope.treePair and angular.isObject($scope.treePair.checkedNodes)
-  #    console.log '2 Node Checked!!'
-  #    console.log $scope.treePair.checkedNodes
-  #  return
-  #)
-
-  $scope.source = () ->
-    return setPairs.getRaw()[0]
 
   $scope.$on 'env:updated', (event, data) ->
     console.log('up')
-    #$scope.treePair.checkedNodes = []
     $scope.treeHierarchy.checkedNodes = []
-    #$scope.left = ''
-    #$scope.right = ''
-
     return
 
   $scope.envs = () ->
@@ -94,10 +78,16 @@ angular.module 'catinuumApp'
     $scope.left = $scope.build_string($scope.treePair.currentNode, e)
 
 
-  $scope.$on 'pairs:updated', (event) ->
-    $scope.treePair.api.selectByLabel '/'
-    #return
+  #$scope.$on 'pairs:updated', (event) ->
+  #  $scope.treePair.api.selectByLabel '/'
+  #  #return
 
+  #$scope.$on 'hierarchy:updated', (event) ->
+  #  console.log 'here'
+  #  $scope.treePair.api.selectByLabel '/'
+
+
+#return
   #$scope.$on '$viewContentLoaded', (event, toState, toParams, fromState, fromParams) ->
     #console.log('here2')
     #$scope.treePair.api.selectByLabel '/'

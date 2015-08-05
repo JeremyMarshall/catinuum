@@ -56,7 +56,7 @@ angular.module 'catinuumApp'
       request = $http.get "/api/sets/full/#{@currenv}"
       request.then (result) =>
         @process(result.data)
-        $rootScope.$broadcast('pairs:updated');
+        #$rootScope.$broadcast('pairs:updated');
 
   getFilteredData: (sets) ->
     s = sets.join('/')

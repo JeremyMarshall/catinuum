@@ -33,7 +33,7 @@ function getKey(what, data) {
   for (var f in meta._compound[what]) {
     k += meta.separator + data[meta._compound[what][f]]
   }
-  client.sadd('ALL' + meta.separator + what, k);
+  client.sadd(meta._labels['all'] + meta.separator + what, k);
 
   return k
 }
@@ -74,7 +74,7 @@ function sets(pair, what, data) {
       }
 
       if ((j != k) && (valInner != val)) {
-        client.sadd(sectionInner + meta.separator + valInner + meta.separator + 'sets', section + meta.separator + val);
+        client.sadd(sectionInner + meta.separator + valInner + meta.separator +  meta._labels['set'], section + meta.separator + val);
       }
     }
   }
@@ -104,13 +104,12 @@ function link(what) {
         ar.push(a);
 
         //client.sinter(ar, redis.print);
-        console.log ('here1');
         client.sinter(ar, function (err, reply2) {
 
           console.log(a);
 
           if (reply2.length > 0)
-            client.sadd(a + '::sets', b, redis.print);
+            client.sadd(a + meta.separator + meta._labels['set'], b, redis.print);
         });
       })
     })

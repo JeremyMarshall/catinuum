@@ -24,10 +24,10 @@ angular.module 'catinuumApp'
 
           @envs[prefix].push item
 
-        @currenv = if $cookies.get('environment') then $cookies.get('environment') else 'ENV::master'
+        @currenv = if $cookies.get('environment') then $cookies.get('environment') else meta.labels['default']
 
     getData1: ->
-      request = $http.get "/api/sets/ALL::ENV"
+      request = $http.get "/api/sets/" + meta.labels['all'] + meta.separator + meta.labels['default_field']
       request.then (result) =>
 
         tmp = result.data.sort()
@@ -59,15 +59,15 @@ angular.module 'catinuumApp'
     setCurr:(e) ->
       @currenv = e
       $cookies.put( 'environment', e)
-      $rootScope.$broadcast('env:updated', @currenv)
+      $rootScope.$emit('env:updated', @currenv)
 
     setDelta:(e) ->
       @delta = e
       $cookies.put( 'delta', e)
-      $rootScope.$broadcast('delta:updated', @delta)
+      $rootScope.$emit('delta:updated', @delta)
 
     setBaseline:(e) ->
       @baseline = e
       $cookies.put( 'baseline', e)
-      $rootScope.$broadcast('baselie:updated', @baseline)
+      $rootScope.$emit('baselie:updated', @baseline)
 ]
